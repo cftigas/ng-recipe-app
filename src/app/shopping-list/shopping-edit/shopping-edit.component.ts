@@ -59,7 +59,6 @@ export class ShoppingEditComponent implements OnInit {
   onClear(){
     this.slForm.reset();
     this.editMode = false;
-
   }
 
   onDelete(){

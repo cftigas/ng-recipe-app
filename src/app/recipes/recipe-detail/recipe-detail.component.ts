@@ -11,7 +11,6 @@ import { RecipeService } from '../recipe.service';
 export class RecipeDetailComponent implements OnInit {
   recipe: Recipe;
   id:number;
-
   constructor(private recipeService: RecipeService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -29,5 +28,14 @@ export class RecipeDetailComponent implements OnInit {
  editRecipe(){
     this.router.navigate(['../', this.id, 'edit'], {relativeTo: this.route})
     //this.router.navigate(['edit'],{relativeTo: this.route});
+ }
+ deleteRecipe(){
+    if(confirm("Are you sure you want to delete " +  this.recipe['name']+"?")) {
+      this.recipeService.deleteRecipe(this.id);
+      this.router.navigate(['../'],{relativeTo: this.route});
+      console.log("Implement delete functionality here");
+    }
+
+    //this.onClear();
  }
 }
