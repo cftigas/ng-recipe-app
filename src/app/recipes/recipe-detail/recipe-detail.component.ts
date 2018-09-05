@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params  } from '@angular/router'
+import { ActivatedRoute, Params, Router } from '@angular/router';
+
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 
@@ -10,32 +11,35 @@ import { RecipeService } from '../recipe.service';
 })
 export class RecipeDetailComponent implements OnInit {
   recipe: Recipe;
-  id:number;
-  constructor(private recipeService: RecipeService, private router: Router, private route: ActivatedRoute) { }
+  id: number;
+
+  constructor(private recipeService: RecipeService,
+              private route: ActivatedRoute,
+              private router: Router) {
+  }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      (params: Params)=>{
-        this.id = +params['id'];
-        this.recipe = this.recipeService.getRecipe(this.id);
-      }
-    );
+    this.route.params
+      .subscribe(
+        (params: Params) => {
+          this.id = +params['id'];
+          this.recipe = this.recipeService.getRecipe(this.id);
+        }
+      );
   }
 
   onAddToShoppingList() {
     this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
   }
- editRecipe(){
-    this.router.navigate(['../', this.id, 'edit'], {relativeTo: this.route})
-    //this.router.navigate(['edit'],{relativeTo: this.route});
- }
- deleteRecipe(){
-    if(confirm("Are you sure you want to delete " +  this.recipe['name']+"?")) {
-      this.recipeService.deleteRecipe(this.id);
-      this.router.navigate(['../'],{relativeTo: this.route});
-      console.log("Implement delete functionality here");
-    }
 
-    //this.onClear();
- }
+  onEditRecipe() {
+    this.router.navigate(['edit'], {relativeTo: this.route});
+    // this.router.navigate(['../', this.id, 'edit'], {relativeTo: this.route});
+  }
+
+  onDeleteRecipe() {
+    this.recipeService.deleteRecipe(this.id);
+    this.router.navigate(['/recipes']);
+  }
+
 }

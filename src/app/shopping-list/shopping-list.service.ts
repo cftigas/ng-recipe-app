@@ -1,9 +1,7 @@
 import { Ingredient } from '../shared/ingredient.model';
-import { EventEmitter } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 
 export class ShoppingListService {
-  //ingredientsChanged = new EventEmitter<Ingredient[]>();
   ingredientsChanged = new Subject<Ingredient[]>();
   startedEditing = new Subject<number>();
   private ingredients: Ingredient[] = [
@@ -15,8 +13,7 @@ export class ShoppingListService {
     return this.ingredients.slice();
   }
 
-  //fetching the ingredients to the textbox upon clicking the item 
-  getIngredient(index: number){
+  getIngredient(index: number) {
     return this.ingredients[index];
   }
 
@@ -33,14 +30,13 @@ export class ShoppingListService {
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
-  deleteIngredient(index: number){
-    this.ingredients.splice(index, 1);
+  updateIngredient(index: number, newIngredient: Ingredient) {
+    this.ingredients[index] = newIngredient;
     this.ingredientsChanged.next(this.ingredients.slice());
-
   }
 
-  updateIngredient(index: number, newIngredient: Ingredient){
-    this.ingredients[index] = newIngredient;
+  deleteIngredient(index: number) {
+    this.ingredients.splice(index, 1);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 }
