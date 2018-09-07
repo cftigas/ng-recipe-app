@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 
@@ -11,6 +13,9 @@ import { ShoppingListService } from './../shopping-list/shopping-list.service';
 
 import { SharedModule } from '../shared/shared.module';
 import { AppRoutingModule } from '../app-routing.module';
+import { AuthInterceptor } from '../shared/auth.interceptor';
+import { LoggingInterceptor } from '../shared/logging.interceptor';
+
 
 
 @NgModule({
@@ -19,6 +24,7 @@ import { AppRoutingModule } from '../app-routing.module';
     HomeComponent
   ],
   imports: [
+    HttpClientModule,
     SharedModule,
     AppRoutingModule
   ],
@@ -26,7 +32,16 @@ import { AppRoutingModule } from '../app-routing.module';
     HeaderComponent,
     AppRoutingModule
   ],
-  providers: [ShoppingListService, RecipeService, DataStorageService, AuthService, AuthGuard],
+  providers: [
+    ShoppingListService, 
+    RecipeService, 
+    DataStorageService, 
+    AuthService, 
+    AuthGuard,
+    {provide:HTTP_INTERCEPTORS, useClass:AuthInterceptor, multi: true},
+    {provide:HTTP_INTERCEPTORS, useClass:LoggingInterceptor, multi: true}
+
+  ]
 
 })
 export class CoreModule { }
